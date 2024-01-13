@@ -16,63 +16,79 @@
           <h3>Groups</h3>
           <div style="border: solid 1px black; width: 100%">
             <table class="table">
-            <tr ng-repeat="chat in groups">
-              <td>
-                <a class="btn-link" ng-click="select_chat(chat.id,chat.name,true)">
-                <span> {{ chat.name }} </span>
-              </a>
-              </td>
-              <td> {{ chat.members.split(' ').length }} members </td>
-              <td>
-                <button class="btn-info" ng-click="select_group(chat.id, chat.name, chat.members)">E</button>
-                <button class="btn-danger" ng-click="delete_group(chat.id, chat.name)">D</button>
-              </td>
-            </tr>
-          </table>
-            <button class="btn-primary">Create Group</button>
+              <tr ng-repeat="chat in public_groups">
+                <td>
+                  <a class="btn-link" ng-click="select_group(chat.id,chat.name,chat.members, chat.created_by)">
+                    <span> {{ chat.name }} </span>
+                  </a>
+                </td>
+                <td> {{ chat.members.split(' ').length }} members</td>
+              </tr>
+            </table>
+
           </div>
-
-
-          <hr>
-          <input type="text" class="input" ng-model="group_name">
           <br>
-          Members :
-          <table class="table">
-            <tr ng-repeat="member in group_members">
-              <td>
-                {{ get_name(member) }}
-              </td>
-              <td>
-                <button class="btn-danger pull-right" ng-click="delete_user(member)"> X </button>
-              </td>
-            </tr>
-          </table>
-          <div ng-if="group_members.length < users.length">
-            <select ng-model="add_user" ng-change="update_user(add_user)">
-            <option ng-repeat="user in users" value="{{user.id}}" ng-if="!group_members.includes(user.id)">
-              {{ user.username }}
-            </option>
-          </select>
+          <div style="border: solid 1px black; width: 100%">
+            <label>Group Name : </label>
+            <input type="text" class="input" ng-model="group_name" placeholder="Enter the group name .. ">
+            <br>
+            <label>Members: </label>
+            <table class="table">
+              <tr ng-repeat="member in group_members">
+                <td>
+                  {{ get_name(member) }}
+                </td>
+                <td ng-if="group_owner === user_id">
+                  <button class="btn-danger pull-right" ng-click="remove_user_from_group(member)"> X</button>
+                </td>
+              </tr>
+            </table>
+            <div ng-if="group_members.length < users.length">
+              Select the user to add to group
+              <select ng-model="add_user" ng-change="add_user_to_group(add_user)" class="select">
+                <option ng-repeat="user in users" value="{{user.id}}" ng-if="!group_members.includes(user.id)">
+                  {{ user.username }}
+                </option>
+              </select>
+            </div>
+            <button ng-if="group_owner != user_id"
+                    class="btn-danger" ng-click="update_group()">
+              <i class="fa fa-arrow-left"></i> Leave Group
+            </button>
+            <button ng-if="group_owner === user_id"
+                    class="btn-danger" ng-click="create_group()">
+              <i class="fa fa-trash"></i> Delete Group
+            </button>
+
+            <button ng-if="group_id != ''"
+                    class="btn-info pull-right" ng-click="update_group()">Save Group</button>
+            <button ng-if="group_id === ''"
+                    class="btn-primary pull-right" ng-click="create_group()">
+              <i class="fa fa-plus"></i> Create Group
+            </button>
+
           </div>
-          <button class="btn-default">Save</button>
+
         </div>
       </div>
+
+
       <div class="col-lg-6">
         <div class="">
           <h3>Messages</h3>
         </div>
-        <div class="box box-body">
+        <div style="border: solid 1px black; width: 100%; padding: 15px">
           <div ng-if="chat == ''">
             No Chat Selected!
           </div>
           <div ng-if="chat != ''">
             <h3>
-              {{ chat_type ? 'Group Chat at ' : 'Conversation with '  }} {{ chat_name }}
-              <button class="btn-danger btn-sm pull-right" ng-click="close_chat()">
-                <span class="fa-close"></span>
+              {{ chat_type ? 'Group Chat at ' : 'Conversation with ' }} {{ chat_name }}
+              <button class="btn btn-sm pull-right" ng-click="close_chat()">
+                Hide Chat
               </button>
             </h3>
-
+            <b ng-if="chat_type"> {{ get_name(group_owner) }} Created this {{ group_name }} group </b>
             <div ng-repeat="msg in messages">
               <div ng-if="msg.sender !== user_id">
                 <b>{{ get_name(msg.sender) }}</b> Says : <span>{{ msg.content }}</span>
@@ -93,18 +109,18 @@
           <h3>Users</h3>
           <div style="border: solid 1px black; width: 100%">
             <table class="table">
-            <tr ng-repeat="chat in private_chats">
-              <td>
-                <a class="btn-link" ng-click="select_chat(chat.id, chat.members, false)">
-                <span> {{ get_name(chat.members) }} </span>
-              </a>
-              </td>
-              <td ng-show="admin">
-                <button class="btn-info" ng-click="select_chat(chat.id, chat.name, chat.members)">E</button>
-                <button class="btn-danger" ng-click="delete_group(chat.id, chat.name)">D</button>
-              </td>
-            </tr>
-          </table>
+              <tr ng-repeat="chat in private_chats">
+                <td>
+                  <a class="btn-link" ng-click="select_chat(chat.id, chat.members, false)">
+                    <span> {{ get_name(chat.members) }} </span>
+                  </a>
+                </td>
+                <td ng-show="admin">
+                  <button class="btn-info" ng-click="select_chat(chat.id, chat.name, chat.members)">E</button>
+                  <button class="btn-danger" ng-click="delete_group(chat.id, chat.name)">D</button>
+                </td>
+              </tr>
+            </table>
             <button class="btn-primary">Create User</button>
           </div>
         </div>

@@ -14,10 +14,12 @@ window[appName].controller('dashboard_controller', function ($rootScope, $scope,
   $scope.chat_name = ''
   $scope.chat_type = false
   $scope.members = []
+  $scope.group_id = ''
   $scope.group_name = ''
   $scope.group_members = []
+  $scope.group_owner = ''
   $scope.add_user = ''
-
+  $scope.public_groups = []
   $scope.private_chats = []
 
   if (localStorage.getItem('token')) {
@@ -30,6 +32,7 @@ window[appName].controller('dashboard_controller', function ($rootScope, $scope,
     $scope.chat = id
     $scope.chat_name = group ? name : $scope.get_name(name)
     $scope.chat_type = group
+    $scope.get_message()
   }
   $scope.send_message = function (content_text) {
     if (content_text === '') {
@@ -67,6 +70,9 @@ window[appName].controller('dashboard_controller', function ($rootScope, $scope,
     $scope.chat = ''
   }
   $scope.get_name = function (id) {
+    if (id === $scope.user_id) {
+      return $scope.user_name
+    }
     filter_query = id.replace($scope.user_id, '').trim()
     console.log(filter_query)
     user = $scope.users.find(item => item.id === filter_query)
@@ -79,8 +85,12 @@ window[appName].controller('dashboard_controller', function ($rootScope, $scope,
     }
   }
   $scope.remove_user_from_group = function (user_id) {
-    if (!$scope.group_members.includes(user_id)) {
-      $scope.group_members.push(user_id)
+    member_name = $scope.get_name(user_id)
+    if (confirm('Are you sure? You want to remove "' + member_name + '" from "' + $scope.group_name + '" Group ?')) {
+      var index = $scope.group_members.indexOf(user_id)
+      if (index !== -1) {
+        $scope.group_members.splice(index, 1)
+      }
     }
   }
   $scope.get_message = function () {
@@ -116,15 +126,18 @@ window[appName].controller('dashboard_controller', function ($rootScope, $scope,
 
   /*  Group management */
 
-  $scope.select_group = function (id, name, members) {
+  $scope.select_group = function (id, name, members, owner) {
     $scope.group_id = id
     $scope.group_name = name
-    $scope.group_members = members
+    $scope.group_members = members.split(' ')
+    $scope.group_owner = owner
+    $scope.select_chat(id, name, true)
   }
 
   $scope.clear_group = function () {
     $scope.group_id = ''
     $scope.group_name = ''
+    $scope.group_owner = ''
     $scope.group_members = []
   }
 
@@ -146,6 +159,7 @@ window[appName].controller('dashboard_controller', function ($rootScope, $scope,
       chats = response.data
       $scope.groups = response.data
       $scope.private_chats = chats.filter(item => item.is_group === false)
+      $scope.public_groups = chats.filter(item => item.is_group === true)
       console.log($scope.private_chats)
     }, function errorCallback (response) {
       $state.go('login')
@@ -154,7 +168,8 @@ window[appName].controller('dashboard_controller', function ($rootScope, $scope,
   $scope.create_group = function () {
 
     $http({
-      method: 'POST', url: 'api/chat/create/?name=' + name + '&members=' + $scope.members + '&token=' + $scope.token
+      method: 'POST',
+      url: 'api/chat/create/?name=' + $scope.group_name + '&members=' + $scope.group_members.join(' ') + '&token=' + $scope.token
     }).then(function successCallback (response) {
       console.log(response.data)
       $scope.clear_group()
@@ -169,7 +184,7 @@ window[appName].controller('dashboard_controller', function ($rootScope, $scope,
 
     $http({
       method: 'PATCH',
-      url: 'api/chat/' + $scope.chat_id + '/update/?name=' + name + '&members=' + $scope.members + '&token=' + $scope.token
+      url: 'api/chat/' + $scope.group_id + '/update/?name=' + $scope.group_name + '&members=' + $scope.group_members.join(' ') + '&token=' + $scope.token
     }).then(function successCallback (response) {
       console.log(response.data)
       $scope.clear_group()
