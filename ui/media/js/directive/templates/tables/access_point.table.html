@@ -1,0 +1,68 @@
+<table class="table table-bordered">
+    <tbody>
+    <tr>
+        <th ng-click="colum_sort('hostname')">Hostname
+            <i class="fa fa-fw" ng-class="get_col_icon('hostname')"></i>
+        </th>
+        <th ng-click="colum_sort('mac')">MAC Address
+            <i class="fa fa-fw" ng-class="get_col_icon('mac')"></i>
+        </th>
+        <th ng-click="colum_sort('model')">Model
+            <i class="fa fa-fw" ng-class="get_col_icon('model')"></i>
+        </th>
+        <th ng-click="colum_sort('serial')">Serial Number
+            <i class="fa fa-fw" ng-class="get_col_icon('serial')"></i>
+        </th>
+        <th ng-click="colum_sort('cluster')" ng-show="config.location!='cluster'">Cluster
+            <i class="fa fa-fw" ng-class="get_col_icon('cluster')"></i>
+        </th>
+        <th ng-click="colum_sort('controller')" ng-show="config.location!='controller'">Controller
+            <i class="fa fa-fw" ng-class="get_col_icon('controller')"></i>
+        </th>
+        <th ng-click="colum_sort('ues')">Client Sessions
+            <i class="fa fa-fw" ng-class="get_col_icon('ues')"></i>
+        </th>
+        <th ng-click="colum_sort('throughput')" colspan="2">Throughput
+            <i class="fa fa-fw" ng-class="get_col_icon('throughput')"></i>
+        </th>
+        <th ng-click="colum_sort('status')">Status
+            <i class="fa fa-fw" ng-class="get_col_icon('status')"></i>
+        </th>
+    </tr>
+    <tr></tr>
+    <tr ng-repeat="ap in list">
+        <td>
+            <a ui-sref="accesspoint({id:ap.id})">
+                <span ng-bind-html="to_trusted(ap.hostname)"></span>
+            </a>
+        </td>
+        <td ng-bind-html="to_trusted(ap.mac)">  </td>
+        <td ng-bind-html="to_trusted(ap.model)">  </td>
+        <td ng-bind-html="to_trusted(ap.serial)">  </td>
+        <td ng-show="config.location!='cluster'">
+            <a ui-sref="cluster({id:ap.cluster_id})">{{ ap.cluster }}</a>
+        </td>
+        <td ng-show="config.location!='controller'">
+            <a ui-sref="controller({id:ap.controller_id})"> {{ ap.controller }} </a>
+        </td>
+        <td>
+            <wms-client-sessions
+                    options="{ total: ap.ues.total, count_24: ap.ues.count_24, count_5:ap.ues.count_5 }">
+            </wms-client-sessions>
+        </td>
+        <td>
+            <wms-tx-tp tx="ap.throughput.tx"></wms-tx-tp>
+        </td>
+        <td>
+            <wms-rx-tp rx="ap.throughput.rx"></wms-rx-tp>
+        </td>
+        <td>
+            <wms-status-led options="{ status : ap.status }"></wms-status-led>
+        </td>
+    </tr>
+    <tr ng-show="!list.length">
+        <td colspan="100">No AccessPoint to display</td>
+    </tr>
+
+    </tbody>
+</table>

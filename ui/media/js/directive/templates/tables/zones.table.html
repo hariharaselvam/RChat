@@ -1,0 +1,49 @@
+<table class="table table-bordered">
+    <tbody>
+    <tr>
+        <th ng-click="colum_sort('name')">Name
+            <i class="fa fa-fw" ng-class="get_col_icon('name')"></i>
+        </th>
+        <th ng-click="colum_sort('cluster_name')" ng-show="config.location!='cluster'">Cluster
+            <i class="fa fa-fw" ng-class="get_col_icon('cluster_name')"></i>
+        </th>
+        <th ng-click="colum_sort('ap')">Access Points
+            <i class="fa fa-fw" ng-class="get_col_icon('ap')"></i>
+        </th>
+        <th ng-click="colum_sort('cd')">Client Sessions
+            <i class="fa fa-fw" ng-class="get_col_icon('cd')"></i>
+        </th>
+        <th colspan="2" ng-click="colum_sort('throughput')">Throughput
+            <i class="fa fa-fw" ng-class="get_col_icon('throughput')"></i>
+        </th>
+    </tr>
+    <tr></tr>
+    <tr ng-repeat="zone in list">
+        <td>
+            <a ui-sref="zone({id:zone.id})">{{ zone.name }}</a>
+        </td>
+        <td ng-show="config.location!='cluster'">
+            <a ui-sref="cluster({id:zone.cluster_id})">{{ zone.cluster_name }}</a>
+        </td>
+        <td>
+            <wms-access-points
+                    options="{ total: zone.aps.total, online: zone.aps.online, offline:zone.aps.offline, unknown: zone.aps.unknown  }">
+            </wms-access-points>
+        </td>
+        <td>
+            <wms-client-sessions
+                    options="{ total: zone.ues.total, count_24: zone.ues.ues_24, count_5:zone.ues.ues_5 }">
+            </wms-client-sessions>
+        </td>
+        <td>
+            <wms-tx-tp tx="zone.throughput.tx"></wms-tx-tp>
+        </td>
+        <td>
+            <wms-rx-tp rx="zone.throughput.rx"></wms-rx-tp>
+        </td>
+    </tr>
+    <tr ng-show="!list.length">
+        <td colspan="100">No Zone to display</td>
+    </tr>
+    </tbody>
+</table>

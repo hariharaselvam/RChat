@@ -1,0 +1,61 @@
+<div class="content-wrapper">
+    <div class="container">
+        <section class="content-header">
+
+
+            <h1> Profile </h1>
+
+        </section>
+        <section class="content">
+
+            <div class="row">
+                <div class="col-lg-3 col-xs-6">
+                    <div class="small-box bg-blue" >
+                        <div class="inner">
+                            <h3>{{ assisstance_requests }}</h3>
+                            <p>of {{ assisstance_total }} Assistance </p>
+                        </div>
+                        <div class="icon"><i class="fa fa-laptop"></i></div>
+                        <a class="small-box-footer" ui-sref="controllers">More info <i
+                                class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-xs-6">
+                    <div class="small-box bg-red">
+                        <div class="inner">
+                            <h3>{{ patrol_failed }}<sup style="font-size: 20px"></sup></h3>
+                            <p>Failed Patrols</p>
+                        </div>
+                        <div class="icon"><i class="fa fa-wifi"></i></div>
+                        <a class="small-box-footer" ui-sref="accesspoints">More info <i
+                                class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-xs-6">
+                    <div class="small-box bg-green" >
+                        <div class="inner">
+                            <h3>{{ sites_active }}</h3>
+                            <p>Active Sites</p>
+                        </div>
+                        <div class="icon"><i class="fa fa-mobile"></i></div>
+                        <a class="small-box-footer" ui-sref="uesessions">More info <i
+                                class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-xs-6">
+                    <div class="small-box bg-red" >
+                        <div class="inner">
+                            <h3>{{ alarms }}</h3>
+                            <p>Other Alarms</p>
+                        </div>
+                        <div class="icon"><i class="fa fa-bell"></i></div>
+                        <a class="small-box-footer" ui-sref="alarms">More info <i
+                                class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+
+
+        </section>
+    </div>
+</div>

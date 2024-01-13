@@ -1,0 +1,32 @@
+<table class="table table-bordered">
+    <tbody>
+    <tr>
+        <th ng-click="colum_sort('current')">Current
+            <i class="fa fa-fw" ng-class="get_col_icon('current')"></i>
+        </th>
+        <th ng-click="colum_sort('target')">Target
+            <i class="fa fa-fw" ng-class="get_col_icon('target')"></i>
+        </th>
+        <th ng-click="colum_sort('shedule')">Scheduled Upgrade
+            <i class="fa fa-fw" ng-class="get_col_icon('shedule')"></i>
+        </th>
+        <th ng-click="colum_sort('created')">First Seen
+            <i class="fa fa-fw" ng-class="get_col_icon('created')"></i>
+        </th>
+        <th ng-click="colum_sort('modified')">Last Seen
+            <i class="fa fa-fw" ng-class="get_col_icon('modified')"></i>
+        </th>
+    </tr>
+    <tr></tr>
+    <tr ng-repeat="et in list">
+        <td>{{ et.current }}</td>
+        <td>{{ et.target }}</td>
+        <td>{{ et.upgrade_time }}</td>
+        <td>{{ et.created }}</td>
+        <td>{{ et.modified }}</td>
+    </tr>
+    <tr ng-show="!list.length">
+        <td colspan="100">No data to display</td>
+    </tr>
+    </tbody>
+</table>

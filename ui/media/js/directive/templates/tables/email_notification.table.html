@@ -1,0 +1,45 @@
+<table class="table table-bordered">
+    <tr>
+        <th ng-click="colum_sort('category')">Category
+            <i class="fa fa-fw" ng-class="get_col_icon('category')"></i>
+        </th>
+        <th ng-click="colum_sort('name')">Name
+            <i class="fa fa-fw" ng-class="get_col_icon('name')"></i>
+        </th>
+        <th ng-click="colum_sort('description')">Description
+            <i class="fa fa-fw" ng-class="get_col_icon('description')"></i>
+        </th>
+        <th ng-click="colum_sort('update_interval')">Update Interval
+            <i class="fa fa-fw" ng-class="get_col_icon('update_interval')"></i>
+        </th>
+        <th ng-click="colum_sort('enabled')">Enabled
+            <i class="fa fa-fw" ng-class="get_col_icon('enabled')"></i>
+        </th>
+    </tr>
+    <tr></tr>
+    <tr ng-repeat="alert in list">
+        <td>{{ alert.category }}</td>
+        <td>{{ alert.name }}</td>
+        <td>{{ alert.description }}</td>
+        <td>
+            <select ng-model="alert.update_interval"
+                    ng-change="update_email_settings(alert.id,alert.update_interval,alert.enabled)">
+                <option value="0"> Disabled</option>
+                <option value="15"> 15</option>
+                <option value="30"> 30</option>
+                <option value="45"> 45</option>
+                <option value="60"> 60</option>
+            </select> <span ng-hide="alert.update_interval=='0'">Minutes</span>
+        </td>
+        <td>
+            <i class="fa  fa-toggle-on" ng-show="alert.enabled==true"
+               ng-click="update_email_settings(alert.id,alert.update_interval,false)"> </i>
+            <i class="fa  fa-toggle-off" ng-show="alert.enabled==false"
+               ng-click="update_email_settings(alert.id,alert.update_interval,true)"> </i>
+
+        </td>
+    </tr>
+    <tr ng-show="!list.length">
+        <td colspan="100">No Setting to display</td>
+    </tr>
+</table>

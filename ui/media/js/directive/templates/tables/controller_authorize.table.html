@@ -1,0 +1,39 @@
+<table class="table table-bordered">
+    <tbody>
+    <tr>
+        <th ng-click="colum_sort('serial')">Serial
+            <i class="fa fa-fw" ng-class="get_col_icon('serial')"></i>
+        </th>
+        <th ng-click="colum_sort('hostname')">Hostname
+            <i class="fa fa-fw" ng-class="get_col_icon('hostname')"></i>
+        </th>
+        <th ng-click="colum_sort('cluster')">Cluster
+            <i class="fa fa-fw" ng-class="get_col_icon('cluster')"></i>
+        </th>
+        <th ng-click="colum_sort('created')">First Seen
+            <i class="fa fa-fw" ng-class="get_col_icon('created')"></i>
+        </th>
+        <th ng-click="colum_sort('modified')">Last Seen
+            <i class="fa fa-fw" ng-class="get_col_icon('modified')"></i>
+        </th>
+        <th ng-click="colum_sort('status')">Authorised
+            <i class="fa fa-fw " ng-class="get_col_icon('status')"></i>
+        </th>
+    </tr>
+    <tr></tr>
+    <tr ng-repeat="cont in list">
+        <td>{{ cont.serial }}</td>
+        <td>{{ cont.hostname }}</td>
+        <td>{{ cont.cluster }}</td>
+        <td>{{ cont.created }}</td>
+        <td>{{ cont.modified }}</td>
+        <td>
+            <i class="fa fa-fw" ng-class="cont.toggle" ng-click="authorize(cont.id,cont.new)"></i>
+        </td>
+    </tr>
+    <tr ng-show="list.length==0">
+        <td colspan="100">No Controller to display</td>
+    </tr>
+
+    </tbody>
+</table>

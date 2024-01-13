@@ -1,0 +1,83 @@
+<table class="table table-bordered">
+    <tbody>
+    <tr>
+        <th ng-click="colum_sort('timestamp')">Timestamp
+            <i class="fa fa-fw" ng-class="get_col_icon('timestamp')"></i>
+        </th>
+        <th ng-click="colum_sort('node')" ng-show="config.location!='node'">Host
+            <i class="fa fa-fw" ng-class="get_col_icon('node')"></i>
+        </th>
+        <th ng-click="colum_sort('tenant')">Tenant
+            <i class="fa fa-fw" ng-class="get_col_icon('tenant')"></i>
+        </th>
+        <th ng-click="colum_sort('cluster')" ng-show="config.location!='cluster'">Cluster
+            <i class="fa fa-fw" ng-class="get_col_icon('cluster')"></i>
+        </th>
+        <th ng-click="colum_sort('controller')" ng-show="config.location!='controller'">Controller
+            <i class="fa fa-fw" ng-class="get_col_icon('controller')"></i>
+        </th>
+        <th ng-click="colum_sort('throughput')">Content
+            <i class="fa fa-fw" ng-class="get_col_icon('throughput')"></i>
+        </th>
+        <th ng-click="colum_sort('is_processed')">Processed
+            <i class="fa fa-fw" ng-class="get_col_icon('is_processed')"></i>
+        </th>
+        <th ng-click="colum_sort('processing_time')">Processing Time
+            <i class="fa fa-fw" ng-class="get_col_icon('processing_time')"></i>
+        </th>
+        <th ng-click="colum_sort('action')">Actions
+            <i class="fa fa-fw" ng-class="get_col_icon('action')"></i>
+        </th>
+
+    </tr>
+    <tr></tr>
+    <tr ng-repeat="data in list">
+        <td>{{ data.timestamp_str }}</td>
+        <td ng-show="config.location!='node'">
+            <a ui-sref="node({id:data.node_id})">{{ data.node }}</a>
+        </td>
+        <td>
+            <a ui-sref="tenant({id:data.tenant_id})">{{ data.tenant }}</a>
+        </td>
+        <td ng-show="config.location!='cluster'">
+            <a ui-sref="cluster({id:data.cluster_id})">{{ data.cluster }}</a>
+        </td>
+        <td ng-show="config.location!='controller'">
+            <a ui-sref="controller({id:data.controller_id})">{{ data.controller }}</a>
+        </td>
+        <td>
+            <i class="fa fa-fw fa-heartbeat" ng-show="data.content=='heartbeat'"
+               title="Heartbeats"></i>
+            <i class="fa fa-fw fa-calendar" ng-show="data.content=='events'"
+               title="Statistics"></i>
+            <i class="fa fa-fw fa-bar-chart" ng-show="data.content=='statistics'"
+               title="Events"></i>
+            <i class="fa fa-fw fa-gear" ng-show="data.content=='config'"
+               title="config"></i>
+            {{ data.content }}
+        </td>
+        <td>
+            <span style="color:green" ng-if="data.is_processed==true">
+                <i class="fa fa-fw fa-check" title="Processed"></i>
+            </span>
+            <span ng-if="data.worker_busy==true">
+                <i class="fa fa-fw fa-hourglass" title="Processing..."></i>
+            </span>
+            <span ng-if="data.worker_busy!=true && data.is_processed==false">
+                <i class="fa fa-fw fa-clock-o" title="In the queue"></i>
+            </span>
+        </td>
+        <td>{{ data.processing_time }}</td>
+        <td>
+            <a href="{{ data.download }}" ng-show="config.staff">
+                <i class="fa fa-fw fa-cloud-download" title="Download File"></i>
+            </a>
+            <i class="fa fa-fw fa-refresh" title="Reprocess File"
+               ng-show="data.can_reprocess" ng-click="reprocess(data.reprocess)"></i>
+        </td>
+    </tr>
+    <tr ng-show="!list.length">
+        <td colspan="100">No data to display</td>
+    </tr>
+    </tbody>
+</table>

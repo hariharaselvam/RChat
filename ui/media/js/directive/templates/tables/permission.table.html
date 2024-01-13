@@ -1,0 +1,28 @@
+<table class="table table-bordered">
+    <tbody>
+    <tr>
+        <th ng-click="colum_sort('codename')"> Name
+            <i class="fa fa-fw" ng-class="get_col_icon('codename')"></i>
+        </th>
+        <th ng-click="colum_sort('description')"> Description
+            <i class="fa fa-fw" ng-class="get_col_icon('description')"></i>
+        </th>
+        <th ng-click="colum_sort('enabled')"> Status
+            <i class="fa fa-fw" ng-class="get_col_icon('enabled')"></i>
+        </th>
+    </tr>
+    <tr></tr>
+    <tr ng-repeat="p in list">
+        <td class="name">{{ p.codename }}</td>
+        <td class="description">{{ p.description }}</td>
+        <td class="status">
+            <i class="fa fa-toggle-on"
+               ng-click="change_permission(p.codename,0)"
+               ng-show="p.enabled==1"> </i>
+            <i class="fa fa-toggle-off"
+               ng-click="change_permission(p.codename,1)"
+               ng-show="p.enabled==0"> </i>
+        </td>
+    </tr>
+    </tbody>
+</table>

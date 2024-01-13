@@ -1,0 +1,114 @@
+<div class="content-wrapper">
+  <div class="container">
+    <section class="content-header">
+
+
+      <h1>
+        Real Chat
+      </h1>
+      <span class="pull-right"> Hello: {{ user_name }}</span>
+
+    </section>
+
+    <section class="content">
+      <div class="col-lg-3">
+        <div class="">
+          <h3>Groups</h3>
+          <div style="border: solid 1px black; width: 100%">
+            <table class="table">
+            <tr ng-repeat="chat in groups">
+              <td>
+                <a class="btn-link" ng-click="select_chat(chat.id,chat.name,true)">
+                <span> {{ chat.name }} </span>
+              </a>
+              </td>
+              <td> {{ chat.members.split(' ').length }} members </td>
+              <td>
+                <button class="btn-info" ng-click="select_group(chat.id, chat.name, chat.members)">E</button>
+                <button class="btn-danger" ng-click="delete_group(chat.id, chat.name)">D</button>
+              </td>
+            </tr>
+          </table>
+            <button class="btn-primary">Create Group</button>
+          </div>
+
+
+          <hr>
+          <input type="text" class="input" ng-model="group_name">
+          <br>
+          Members :
+          <table class="table">
+            <tr ng-repeat="member in group_members">
+              <td>
+                {{ get_name(member) }}
+              </td>
+              <td>
+                <button class="btn-danger pull-right" ng-click="delete_user(member)"> X </button>
+              </td>
+            </tr>
+          </table>
+          <div ng-if="group_members.length < users.length">
+            <select ng-model="add_user" ng-change="update_user(add_user)">
+            <option ng-repeat="user in users" value="{{user.id}}" ng-if="!group_members.includes(user.id)">
+              {{ user.username }}
+            </option>
+          </select>
+          </div>
+          <button class="btn-default">Save</button>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="">
+          <h3>Messages</h3>
+        </div>
+        <div class="box box-body">
+          <div ng-if="chat == ''">
+            No Chat Selected!
+          </div>
+          <div ng-if="chat != ''">
+            <h3>
+              {{ chat_type ? 'Group Chat at ' : 'Conversation with '  }} {{ chat_name }}
+              <button class="btn-danger btn-sm pull-right" ng-click="close_chat()">
+                <span class="fa-close"></span>
+              </button>
+            </h3>
+
+            <div ng-repeat="msg in messages">
+              <div ng-if="msg.sender !== user_id">
+                <b>{{ get_name(msg.sender) }}</b> Says : <span>{{ msg.content }}</span>
+              </div>
+              <div ng-if="msg.sender === user_id">
+                <span class="pull-right">{{ msg.content }}</span>
+              </div>
+              <br>
+            </div>
+            <br>
+            <input ng-model="content_text" class="input-lg"/>
+            <button class="btn-lg" ng-click="send_message(content_text)">Send</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="">
+          <h3>Users</h3>
+          <div style="border: solid 1px black; width: 100%">
+            <table class="table">
+            <tr ng-repeat="chat in private_chats">
+              <td>
+                <a class="btn-link" ng-click="select_chat(chat.id, chat.members, false)">
+                <span> {{ get_name(chat.members) }} </span>
+              </a>
+              </td>
+              <td ng-show="admin">
+                <button class="btn-info" ng-click="select_chat(chat.id, chat.name, chat.members)">E</button>
+                <button class="btn-danger" ng-click="delete_group(chat.id, chat.name)">D</button>
+              </td>
+            </tr>
+          </table>
+            <button class="btn-primary">Create User</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

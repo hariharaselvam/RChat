@@ -1,0 +1,38 @@
+<table class="table table-bordered">
+    <tr>
+        <th ng-click="colum_sort('name')">Group Name
+            <i class="fa fa-fw" ng-class="get_col_icon('name')"></i>
+        </th>
+        <th ng-click="colum_sort('description')">Description
+            <i class="fa fa-fw" ng-class="get_col_icon('description')"></i>
+        </th>
+        <th ng-click="colum_sort('tenant')">Tenant
+            <i class="fa fa-fw" ng-class="get_col_icon('tenant')"></i>
+        </th>
+        <th ng-click="colum_sort('users')" ng-show="config.location!='user'">Users
+            <i class="fa fa-fw" ng-class="get_col_icon('users')"></i>
+        </th>
+        <th ng-click="colum_sort('action')" ng-show="config.location=='user'||config.location=='db_pop'">Action
+            <i class="fa fa-fw" ng-class="get_col_icon('action')"></i>
+        </th>
+    </tr>
+    <tr></tr>
+    <tr ng-repeat="group in list">
+        <td><a ui-sref="group({id:group.id})">{{ group.name }}</a></td>
+        <td>{{ group.description }}</td>
+        <td>{{ group.tenant }}</td>
+        <td ng-show="config.location!='user'">{{ group.users.length }}</td>
+        <td ng-show="config.location=='user'">
+            <span style="color:red;" ng-click="remove_group(group.id,group.name)" data-toggle="tooltip" title="Remove User from {{ group.name }}">
+                <i class="fa fa-fw fa-minus-square"></i>
+            </span>
+        </td>
+        <td ng-show="config.location=='db_pop'">
+            <i class="fa fa-fw fa-toggle-off" ng-show="group.shared==false" ng-click="toggle_dash(group.id,'enable')"></i>
+            <i class="fa fa-fw fa-toggle-on" ng-show="group.shared==true" ng-click="toggle_dash(group.id,'disable')"></i>
+        </td>
+    </tr>
+    <tr ng-show="!list.length">
+        <td colspan="100">No group to display</td>
+    </tr>
+</table>

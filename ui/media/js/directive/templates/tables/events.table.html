@@ -1,0 +1,27 @@
+<table class="table table-bordered">
+    <tr>
+        <th ng-click="colum_sort('timestamp')">Timestamp
+            <i class="fa fa-fw" ng-class="get_col_icon('timestamp')"></i>
+        </th>
+        <th ng-click="colum_sort('application')">Application
+            <i class="fa fa-fw" ng-class="get_col_icon('application')"></i>
+        </th>
+        <th ng-click="colum_sort('type')">Type
+            <i class="fa fa-fw" ng-class="get_col_icon('type')"></i>
+        </th>
+        <th ng-click="colum_sort('description')">Summary
+            <i class="fa fa-fw" ng-class="get_col_icon('description')"></i>
+        </th>
+    </tr>
+    <tr></tr>
+    <tr ng-repeat="event in list">
+        <td>{{ event.timestamp }}</td>
+        <td>{{ event.application }}</td>
+        <td>{{ event.type }} ( {{ event.code }} )</td>
+        <td><span ng-bind-html="event.summary"></span></td>
+    </tr>
+    <tr ng-show="!list.length">
+        <td colspan="100">No event to display</td>
+    </tr>
+</table>
+

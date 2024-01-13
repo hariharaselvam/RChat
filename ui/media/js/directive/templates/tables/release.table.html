@@ -1,0 +1,38 @@
+<table class="table table-bordered">
+    <tbody>
+    <tr>
+        <th ng-click="colum_sort('name')">Name
+            <i class="fa fa-fw" ng-class="get_col_icon('name')"></i>
+        </th>
+        <th ng-click="colum_sort('version')">Version
+            <i class="fa fa-fw" ng-class="get_col_icon('version')"></i>
+        </th>
+        <th ng-click="colum_sort('patch_count')">Patch Count
+            <i class="fa fa-fw" ng-class="get_col_icon('patch_count')"></i>
+        </th>
+        <th ng-click="colum_sort('cont_count')">Controller Count
+            <i class="fa fa-fw" ng-class="get_col_icon('cont_count')"></i>
+        </th>
+        <th ng-click="colum_sort('created')">Created
+            <i class="fa fa-fw" ng-class="get_col_icon('created')"></i>
+        </th>
+        <th ng-click="colum_sort('modified')">Modified
+            <i class="fa fa-fw" ng-class="get_col_icon('modified')"></i>
+        </th>
+    </tr>
+    <tr></tr>
+    <tr ng-repeat="release in list">
+        <td>
+            <a ui-sref="release({id:release.id})">{{ release.fullname }}</a>
+        </td>
+        <td> {{ release.version }} </td>
+        <td> {{ release.patch_count }} </td>
+        <td> {{ release.controller_count }} </td>
+        <td> {{ release.created }} </td>
+        <td> {{ release.modified }} </td>
+    </tr>
+    <tr ng-show="!list.length">
+        <td colspan="100">No SmartZone Release to display</td>
+    </tr>
+    </tbody>
+</table>

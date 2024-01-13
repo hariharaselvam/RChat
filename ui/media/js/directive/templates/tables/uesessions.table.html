@@ -1,0 +1,92 @@
+<table class="table table-bordered">
+    <tr>
+        <th ng-click="colum_sort('ue_mac')" ng-show="config.location!='uedevice'">UE MAC
+            <i class="fa fa-fw" ng-class="get_col_icon('ue_mac')"></i>
+        </th>
+        <th ng-click="colum_sort('ue_hostname')" ng-show="config.location!='uedevice'">Hostname
+            <i class="fa fa-fw" ng-class="get_col_icon('ue_hostname')"></i>
+        </th>
+        <th ng-click="colum_sort('username')" ng-show="config.location!='uedevice'">Username
+            <i class="fa fa-fw" ng-class="get_col_icon('username')"></i>
+        </th>
+        <th ng-click="colum_sort('ap_mac')" ng-show="config.location!='accesspoint'">AP MAC
+            <i class="fa fa-fw" ng-class="get_col_icon('ap_mac')"></i>
+        </th>
+        <th ng-click="colum_sort('radio')">Radio
+            <i class="fa fa-fw" ng-class="get_col_icon('radio')"></i>
+        </th>
+        <th ng-click="colum_sort('ssid')">SSID
+            <i class="fa fa-fw" ng-class="get_col_icon('ssid')"></i>
+        </th>
+        <th ng-click="colum_sort('channel')">Channel(CW)
+            <i class="fa fa-fw" ng-class="get_col_icon('channel')"></i>
+        </th>
+        <th ng-click="colum_sort('mode')">Mode
+            <i class="fa fa-fw" ng-class="get_col_icon('mode')"></i>
+        </th>
+        <th ng-click="colum_sort('auth_type')">Auth Type
+            <i class="fa fa-fw" ng-class="get_col_icon('auth_type')"></i>
+        </th>
+        <th ng-click="colum_sort('rssi')">RSSI
+            <i class="fa fa-fw" ng-class="get_col_icon('rssi')"></i>
+        </th>
+        <th ng-click="colum_sort('ipv4_address')">IPAddress
+            <i class="fa fa-fw" ng-class="get_col_icon('ipv4_address')"></i>
+        </th>
+        <th colspan="2" ng-click="colum_sort('rx_rate')">Throughput
+            <i class="fa fa-fw" ng-class="get_col_icon('rx_rate')"></i>
+        </th>
+        <th ng-click="colum_sort('status')">Status
+            <i class="fa fa-fw" ng-class="get_col_icon('status')"></i>
+        </th>
+
+    </tr>
+    <tr></tr>
+    <tr ng-repeat="clientsessions in list">
+        <td ng-show="config.location!='uedevice'">
+            <a ui-sref="uesession({id:clientsessions.id})"> {{ clientsessions.ue_mac }} </a>
+        </td>
+        <td ng-show="config.location!='uedevice'">
+            <a ui-sref="uedevice({id:clientsessions.ue_id })"> {{ clientsessions.ue_hostname }} </a>
+        </td>
+        <td ng-show="config.location!='uedevice'">
+            {{ clientsessions.username }}
+        </td>
+        <td ng-show="config.location!='accesspoint'">
+            <a ui-sref="accesspoint({id:clientsessions.ap_link_id})">{{ clientsessions.ap_mac }}</a>
+        </td>
+        <td>{{ clientsessions.radio }}</td>
+        <td>{{ clientsessions.ssid }}</td>
+        <td>{{ clientsessions.channel }}({{ clientsessions.channel_width }})</td>
+        <td>{{ clientsessions.mode }}</td>
+        <td>{{ clientsessions.auth_type }}</td>
+        <td>{{ clientsessions.rssi }}</td>
+        <td>
+            {{ clientsessions.ipv4_address }}
+            <span ng-if="clientsessions.ipv6_address!=''&&clientsessions.ipv6_address!='::'">
+                ( {{ clientsessions.ipv6_address }} )
+            </span>
+        </td>
+
+        <td>
+            <wms-tx-tp tx="clientsessions.tx_rate"></wms-tx-tp>
+        </td>
+        <td>
+            <wms-rx-tp rx="clientsessions.rx_rate"></wms-rx-tp>
+        </td>
+        <td>
+            <span style="color: green">
+                <i class="fa fa-user" ng-if="clientsessions.status =='AUTHORIZED'"></i>
+            </span>
+            <span style="color: orange">
+                <i class="fa fa-user-secret" ng-if="clientsessions.status ==''"></i>
+            </span>
+            <span style="color: red">
+                <i class="fa fa-user-times" ng-if="clientsessions.status =='UNAUTHORIZED'"></i>
+            </span>
+        </td>
+    </tr>
+    <tr ng-show="!list.length">
+        <td colspan="100">No Session to display</td>
+    </tr>
+</table>
