@@ -149,3 +149,7 @@ opacity:1;
 transform:translateY(0)
 }
 }		
+
+.bordered-box {
+	border: solid 1px black; width: 100%; padding: 10px
+}

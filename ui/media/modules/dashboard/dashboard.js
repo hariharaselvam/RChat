@@ -5,7 +5,7 @@ window[appName].controller('dashboard_controller', function ($rootScope, $scope,
 
   $scope.users = []
   $scope.groups = []
-  $scope.content_text = ''
+  $scope.text_message = 'Hello'
   $scope.messages = []
   $scope.user_id = ''
   $scope.user_name = ''
@@ -14,13 +14,20 @@ window[appName].controller('dashboard_controller', function ($rootScope, $scope,
   $scope.chat_name = ''
   $scope.chat_type = false
   $scope.members = []
+
   $scope.group_id = ''
   $scope.group_name = ''
   $scope.group_members = []
   $scope.group_owner = ''
+  $scope.group_error = ''
   $scope.add_user = ''
+  $scope.group_action = {status: true, message: ''}
   $scope.public_groups = []
   $scope.private_chats = []
+
+  $scope.selected_user_name = ''
+  $scope.selected_user_pass = ''
+  $scope.selected_user_id = ''
 
   if (localStorage.getItem('token')) {
     $scope.token = localStorage.getItem('token')
@@ -34,19 +41,16 @@ window[appName].controller('dashboard_controller', function ($rootScope, $scope,
     $scope.chat_type = group
     $scope.get_message()
   }
-  $scope.send_message = function (content_text) {
-    if (content_text === '') {
-      return null
-    }
+  $scope.send_message = function () {
     $http({
       method: 'POST',
-      url: 'api/message/send/?content=' + content_text + '&chat=' + $scope.chat + '&token=' + $scope.token
+      url: 'api/message/send/?content=' + text_message + '&chat=' + $scope.chat + '&token=' + $scope.token
     }).then(function successCallback (response) {
       console.log(response.data)
     }, function errorCallback (response) {
       $state.go('login')
     })
-    $scope.content = ''
+    $scope.content_text = ''
   }
 
   $scope.get_user = function () {
@@ -68,6 +72,7 @@ window[appName].controller('dashboard_controller', function ($rootScope, $scope,
 
   $scope.close_chat = function () {
     $scope.chat = ''
+    $scope.clear_group()
   }
   $scope.get_name = function (id) {
     if (id === $scope.user_id) {
@@ -123,6 +128,40 @@ window[appName].controller('dashboard_controller', function ($rootScope, $scope,
     })
   }
 
+  /* User management */
+
+
+  $scope.clear_user = function () {
+    $scope.selected_user_name = ''
+    $scope.selected_user_pass = ''
+    $scope.selected_user_id = ''
+  }
+  $scope.user_calls = function (method, url) {
+    $http({
+      method: method,
+      url: 'api/user/' + url + '&token=' + $scope.token
+    }).then(function successCallback (response) {
+      console.log(response.data)
+      $scope.clear_user()
+      $scope.get_users()
+    }, function errorCallback (response) {
+      $state.go('login')
+    })
+  }
+  $scope.create_user = function () {
+    let url = 'create/?username=' + $scope.selected_user_name + '&password=' + $scope.selected_user_pass
+    $scope.user_calls('POST', url)
+  }
+  $scope.update_user = function () {
+    let url = 'update/?username=' + $scope.selected_user_name + '&password=' + $scope.selected_user_pass + '&user_id=' + $scope.selected_user_id
+    $scope.user_calls('PATCH', url)
+  }
+  $scope.delete_user = function () {
+    let url = 'delete/?user_id=' + $scope.selected_user_id
+    $scope.user_calls('PATCH', url)
+  }
+
+  /* User management */
 
   /*  Group management */
 
@@ -149,6 +188,20 @@ window[appName].controller('dashboard_controller', function ($rootScope, $scope,
     }
   }
 
+  $scope.group_calls = function (method, url) {
+    $http({
+      method: method,
+      url: 'api/chat/' + url + '&token=' + $scope.token
+    }).then(function successCallback (response) {
+      console.log(response.data)
+      $scope.group_action = response.data
+      $scope.clear_user()
+      $scope.get_groups()
+    }, function errorCallback (response) {
+      $state.go('login')
+    })
+  }
+
   $scope.get_groups = function () {
 
     $http({
@@ -166,49 +219,29 @@ window[appName].controller('dashboard_controller', function ($rootScope, $scope,
     })
   }
   $scope.create_group = function () {
-
-    $http({
-      method: 'POST',
-      url: 'api/chat/create/?name=' + $scope.group_name + '&members=' + $scope.group_members.join(' ') + '&token=' + $scope.token
-    }).then(function successCallback (response) {
-      console.log(response.data)
-      $scope.clear_group()
-      $scope.get_groups()
-    }, function errorCallback (response) {
-      $state.go('login')
-    })
-
+    let url = 'create/?name=' + $scope.group_name + '&members=' + $scope.group_members.join(' ')
+    $scope.group_calls('POST', url)
   }
 
   $scope.update_group = function () {
-
-    $http({
-      method: 'PATCH',
-      url: 'api/chat/' + $scope.group_id + '/update/?name=' + $scope.group_name + '&members=' + $scope.group_members.join(' ') + '&token=' + $scope.token
-    }).then(function successCallback (response) {
-      console.log(response.data)
-      $scope.clear_group()
-      $scope.get_groups()
-    }, function errorCallback (response) {
-      $state.go('login')
-    })
+    let url = $scope.group_id + '/update/?name=' + $scope.group_name + '&members=' + $scope.group_members.join(' ')
+    $scope.group_calls('PATCH', url)
   }
 
-  $scope.delete_group = function (group_id, group_name) {
-    if (confirm(' Are you sure, you want to delete "' + group_name + '" group?')) {
-      $http({
-        method: 'DELETE', url: 'api/chat/' + group_id + '/delete/?token=' + $scope.token
-      }).then(function successCallback (response) {
-        console.log(response.data)
-        $scope.get_groups()
-      }, function errorCallback (response) {
-        $state.go('login')
-      })
-    } else {
-      console.log(group_name + ' Group delete action cancelled!')
+  $scope.leave_group = function () {
+    if (confirm(' Are you sure, you want to leave from "' + $scope.group_name + '" group?')) {
+      $scope.remove_user_from_group($scope.user_id)
+      $scope.update_group()
     }
+  }
 
-
+  $scope.delete_group = function () {
+    if (confirm(' Are you sure, you want to delete "' + $scope.group_name + '" group?')) {
+      let url = $scope.group_id + '/delete/?name=yes'
+      $scope.group_calls('DELETE', url)
+    } else {
+      console.log($scope.group_name + ' Group delete action cancelled!')
+    }
   }
   /*  Group management */
   $interval($scope.get_message, 10000)

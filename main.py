@@ -196,7 +196,8 @@ async def delete_user(user_id: str, db: Session = Depends(get_db),
                       current_user: UserSession = Depends(get_current_user)):
     if not current_user.get('admin'):
         return {'status': False, 'message': 'No permission available'}
-    db_user = db.query(UserModel).filter(UserModel.id == user_id).first().delete()
+    db_user = db.query(UserModel).filter(UserModel.id == user_id).first()
+    db.delete(db_user)
     db.commit()
     db.flush(db_user)
     return {'status': True, 'message': user_id + ' Deleted'}
@@ -243,12 +244,12 @@ async def update_chat(chat_id: str, name: str = '', members: str = '', db: Sessi
 @app.delete("/api/chat/{chat_id}/delete/", response_model=None)
 async def delete_chat(chat_id: str, db: Session = Depends(get_db),
                       current_user: UserSession = Depends(get_current_user)):
-    db_chat = db.query(ChatModel).filter(ChatModel.id == chat_id).first().delete()
+    db_chat = db.query(ChatModel).filter(ChatModel.id == chat_id).first()
     if current_user.get('id') == db_chat.created_by:
-        db_chat.delete()
+        db.delete(db_chat)
         db.commit()
         db.flush(db_chat)
-        return {'status': True, 'message': db_chat.id + ' updated'}
+        return {'status': True, 'message': chat_id + ' deleted'}
     else:
         return {'status': False, 'message': 'you are not a owner to delete'}
 
