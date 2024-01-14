@@ -2,12 +2,11 @@
   <div class="container">
     <section class="content-header">
 
-
       <h1>
-        Real Chat
+        <i class="fa fa-mobile"></i>
+         Real Chat
       </h1>
-      <span class="pull-right"> Hello: {{ user_name }}</span>
-
+      <span class="pull-right"> Hello: {{ user_name }},   <a ui-sref="login">Logout <i class="fa fa-power-off"></i></a> </span>
     </section>
 
     <section class="content">
@@ -25,15 +24,15 @@
                   </a>
                 </td>
               </tr>
-              <tr>
+              <tr ng-show="false">
                 <td>
-                  <a> <span> Create New User </span> </a>
+                  <a ng-click="select_user('new user', '')"> <span> Create New User </span> </a>
                 </td>
               </tr>
             </table>
           </div>
           <br>
-          <div class="bordered-box" ng-show="selected_user_name!== '' && admin">
+          <div class="bordered-box" ng-show="selected_user_name!== ''">
             <label>Username :</label>
             <br>
             <input type="text" class="input" ng-model="selected_user_name" placeholder="Enter username"/>
@@ -48,17 +47,17 @@
             <input type="text" class="input" ng-model="selected_user_pass" placeholder="Re Enter password"/>
             <br>
             <br>
-            <div style="bottom: 5px; position: absolute">
-                <button class="btn-danger" ng-click="delete_group()">
+            <div ng-show="selected_user_id !=='' " style="bottom: 5px; position: absolute">
+                <button class="btn-danger" ng-click="delete_user()">
                   <i class="fa fa-trash"></i> Delete User
                 </button>
               </div>
             <div style="right: 20px; position: absolute">
-              <button class="btn-info" ng-if="group_id !== ''">
+              <button class="btn-info" ng-if="selected_user_id !== ''" ng-click="update_user()">
                             <i class="fa fa-pencil"></i>
               Save User
             </button>
-                          <button class="btn-primary" ng-if="group_id === ''">
+              <button class="btn-primary" ng-if="selected_user_id === ''" ng-click="create_user()">
                             <i class="fa fa-plus"></i>
               Create User
             </button>
@@ -116,7 +115,7 @@
                   </td>
                 </tr>
               </table>
-            
+
               <div ng-if="group_id != ''" style="bottom: 5px; position: absolute">
                 <button ng-if="group_owner != user_id"
                         class="btn-danger" ng-click="leave_group()">
@@ -147,35 +146,41 @@
 
 
       <div class="col-lg-6">
-        <div>
+        <div class>
           <h3>Messages</h3>
         </div>
-        <div style="border: solid 1px black; width: 100%; padding: 15px">
+        <div class="bordered-box">
           <div ng-if="chat == ''">
             No Chat Selected!
           </div>
           <div ng-if="chat != ''">
             <h3>
               {{ chat_type ? 'Group Chat at ' : 'Conversation with ' }} {{ chat_name }}
-              <button class="btn btn-sm pull-right" ng-click="close_chat()">
+              <button class="btn btn-sm pull-right btn-danger" ng-click="close_chat()">
+                <i class="fa fa-envelope"></i>
                 Hide Chat
               </button>
             </h3>
             <b ng-if="chat_type"> {{ get_name(group_owner) }} Created this {{ group_name }} group </b>
             <div ng-repeat="msg in messages">
               <div ng-if="msg.sender !== user_id">
+                <i class="fa fa-user"></i>
                 <b>{{ get_name(msg.sender) }}</b> Says : <span>{{ msg.content }}</span>
               </div>
               <div ng-if="msg.sender === user_id">
-                <span class="pull-right">{{ msg.content }}</span>
+                <span class="pull-right">{{ msg.content }} <b>: Me</b></span>
               </div>
               <br>
             </div>
             <br>
             <input type="text" ng-model="content_text" class="input-lg">
-            <button class="btn-lg" ng-click="send_message()">Send</button>
+            <button class="btn-lg btn-success" ng-click="send_message()">
+              <i class="fa fa-paper-plane"></i>
+              Send
+            </button>
           </div>
         </div>
+        <br>
       </div>
 
     </section>

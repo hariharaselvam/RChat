@@ -40,6 +40,9 @@ window[appName].controller('dashboard_controller', function ($rootScope, $scope,
     $scope.chat_name = group ? name : $scope.get_name(name)
     $scope.chat_type = group
     $scope.get_message()
+    if (!group) {
+      $scope.select_user($scope.get_name(name), $scope.get_chat_member(name))
+    }
   }
   $scope.send_message = function () {
     $http({
@@ -82,6 +85,10 @@ window[appName].controller('dashboard_controller', function ($rootScope, $scope,
     console.log(filter_query)
     user = $scope.users.find(item => item.id === filter_query)
     return user ? user.username : 'Unknown'
+  }
+
+  $scope.get_chat_member = function (id) {
+    return id.replace($scope.user_id, '').trim()
   }
 
   $scope.add_user_to_group = function (user_id) {
@@ -148,17 +155,27 @@ window[appName].controller('dashboard_controller', function ($rootScope, $scope,
       $state.go('login')
     })
   }
+  $scope.select_user = function (user_name, id) {
+    console.log(user_name, id)
+    if ($scope.admin) {
+      $scope.selected_user_name = user_name
+      $scope.selected_user_pass = ''
+      $scope.selected_user_id = id
+    }
+  }
   $scope.create_user = function () {
     let url = 'create/?username=' + $scope.selected_user_name + '&password=' + $scope.selected_user_pass
     $scope.user_calls('POST', url)
   }
   $scope.update_user = function () {
-    let url = 'update/?username=' + $scope.selected_user_name + '&password=' + $scope.selected_user_pass + '&user_id=' + $scope.selected_user_id
+    let url = $scope.selected_user_id + '/update/?username=' + $scope.selected_user_name + '&password=' + $scope.selected_user_pass
     $scope.user_calls('PATCH', url)
   }
   $scope.delete_user = function () {
-    let url = 'delete/?user_id=' + $scope.selected_user_id
-    $scope.user_calls('PATCH', url)
+    if (confirm('Are you sure you want to delete the user ' + $scope.selected_user_name)) {
+      let url = $scope.selected_user_id + '/delete/?name=yes'
+      $scope.user_calls('DELETE', url)
+    }
   }
 
   /* User management */
