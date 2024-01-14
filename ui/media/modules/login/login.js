@@ -1,4 +1,4 @@
-window[appName].controller('login_controller', function ($rootScope, $scope, $state, $http, http, pin, graph, $window, $location, $q, $filter, $interval) {
+window[appName].controller('login_controller', function ($rootScope, $scope, $state, $http) {
 
 
 

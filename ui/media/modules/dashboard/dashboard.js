@@ -1,4 +1,4 @@
-window[appName].controller('dashboard_controller', function ($rootScope, $scope, $state, $http, http, pin, graph, $window, $location, $q, $filter, $interval) {
+window[appName].controller('dashboard_controller', function ($rootScope, $scope, $state, $http, $window, $location, $q, $filter, $interval) {
 
 
   $rootScope.title = 'R Chat | Home'
