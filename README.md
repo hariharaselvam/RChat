@@ -46,6 +46,32 @@ This will start the FastAPI application locally, and you can access it at http:/
 ### Access RealChat Application
 Open your web browser and navigate to http://localhost:8000 to access the FastAPI application.
 
+## Rules
+* admin can create, edit and delete users
+* any user can create group and add user to group
+* group can be deleted only by creator
+* group can be edited by creator and group member
+* a member can view group where he is part of
+* any user can chat with any other user in private
+
+
+## Demonstrations
+
+### API Documentation
+<img src="Images/api_documentations_view.png">
+
+### Login View
+<img src="Images/login_page.png">
+
+### Default  View
+<img src="Images/home_page.png">
+
+### Group Chat View
+<img src="Images/group_chat.png">
+
+### Private View
+<img src="Images/private_chat.png">
+
 ### Contributing
 Feel free to contribute to this project by submitting issues or pull requests.
 

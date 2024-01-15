@@ -4,7 +4,7 @@
 
       <h1>
         <i class="fa fa-mobile"></i>
-         Real Chat
+        Real Chat
       </h1>
       <span class="pull-right"> Hello: {{ user_name }},   <a ui-sref="login">Logout <i class="fa fa-power-off"></i></a> </span>
     </section>
@@ -48,19 +48,19 @@
             <br>
             <br>
             <div ng-show="selected_user_id !=='' " style="bottom: 5px; position: absolute">
-                <button class="btn-danger" ng-click="delete_user()">
-                  <i class="fa fa-trash"></i> Delete User
-                </button>
-              </div>
+              <button class="btn-danger" ng-click="delete_user()">
+                <i class="fa fa-trash"></i> Delete User
+              </button>
+            </div>
             <div style="right: 20px; position: absolute">
               <button class="btn-info" ng-if="selected_user_id !== ''" ng-click="update_user()">
-                            <i class="fa fa-pencil"></i>
-              Save User
-            </button>
+                <i class="fa fa-pencil"></i>
+                Save User
+              </button>
               <button class="btn-primary" ng-if="selected_user_id === ''" ng-click="create_user()">
-                            <i class="fa fa-plus"></i>
-              Create User
-            </button>
+                <i class="fa fa-plus"></i>
+                Create User
+              </button>
             </div>
 
             <br>
@@ -88,54 +88,54 @@
           </div>
           <br>
           <div class="bordered-box">
-              <h3 ng-if="group_id !== ''">Group Info</h3>
-              <h3 ng-if="group_id === ''">Create Group</h3>
-              <label>Name : </label>
+            <h3 ng-if="group_id !== ''">Group Info</h3>
+            <h3 ng-if="group_id === ''">Create Group</h3>
+            <label>Name : </label>
             <br>
-              <input type="text" class="input" ng-model="group_name" placeholder="Enter the group name .. ">
-              <br> <br>
-              <label>Members: </label>
-              <div ng-if="group_members.length < users.length">
-                Select the member to be added
-                <select ng-model="add_user" ng-change="add_user_to_group(add_user)" class="select">
-                  <option ng-repeat="user in users" value="{{user.id}}" ng-if="!group_members.includes(user.id)">
-                    {{ user.username }}
-                  </option>
-                </select>
-              </div>
-              <table class="table">
-                <tr ng-repeat="member in group_members">
-                  <td>
-                    {{ get_name(member) }}
-                  </td>
-                  <td ng-if="group_owner === user_id || group_id === ''">
-                    <button class="btn-danger pull-right" ng-click="remove_user_from_group(member)">
-                      <i class="fa fa-close"></i>
-                    </button>
-                  </td>
-                </tr>
-              </table>
+            <input type="text" class="input" ng-model="group_name" placeholder="Enter the group name .. ">
+            <br> <br>
+            <label>Members: </label>
+            <div ng-if="group_members.length < users.length">
+              Select the member to be added
+              <select ng-model="add_user" ng-change="add_user_to_group(add_user)" class="select">
+                <option ng-repeat="user in users" value="{{user.id}}" ng-if="!group_members.includes(user.id)">
+                  {{ user.username }}
+                </option>
+              </select>
+            </div>
+            <table class="table">
+              <tr ng-repeat="member in group_members">
+                <td>
+                  {{ get_name(member) }}
+                </td>
+                <td ng-if="group_owner === user_id || group_id === ''">
+                  <button class="btn-danger pull-right" ng-click="remove_user_from_group(member)">
+                    <i class="fa fa-close"></i>
+                  </button>
+                </td>
+              </tr>
+            </table>
 
-              <div ng-if="group_id != ''" style="bottom: 5px; position: absolute">
-                <button ng-if="group_owner != user_id"
-                        class="btn-danger" ng-click="leave_group()">
-                  <i class="fa fa-arrow-left"></i> Leave Group
-                </button>
-                <button ng-if="group_owner === user_id"
-                        class="btn-danger" ng-click="delete_group()">
-                  <i class="fa fa-trash"></i> Delete Group
-                </button>
-              </div>
-              <div style="right: 20px; position: absolute">
-                <button ng-if="group_id != ''"
-                        class="btn-info" ng-click="update_group()">
-                  <i class="fa fa-save"></i> Save Group
-                </button>
-                <button ng-if="group_id === ''"
-                        class="btn-primary" ng-click="create_group()">
-                  <i class="fa fa-plus"></i> Create Group
-                </button>
-              </div>
+            <div ng-if="group_id != ''" style="bottom: 5px; position: absolute">
+              <button ng-if="group_owner != user_id"
+                      class="btn-danger" ng-click="leave_group()">
+                <i class="fa fa-arrow-left"></i> Leave Group
+              </button>
+              <button ng-if="group_owner === user_id"
+                      class="btn-danger" ng-click="delete_group()">
+                <i class="fa fa-trash"></i> Delete Group
+              </button>
+            </div>
+            <div style="right: 20px; position: absolute">
+              <button ng-if="group_id != ''"
+                      class="btn-info" ng-click="update_group()">
+                <i class="fa fa-save"></i> Save Group
+              </button>
+              <button ng-if="group_id === ''"
+                      class="btn-primary" ng-click="create_group()">
+                <i class="fa fa-plus"></i> Create Group
+              </button>
+            </div>
 
             <br>
 
@@ -182,7 +182,8 @@
         </div>
         <br>
       </div>
-
+      <br>
+      <br><br>
     </section>
   </div>
 </div>
